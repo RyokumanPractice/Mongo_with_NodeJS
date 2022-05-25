@@ -1,11 +1,11 @@
+import idPassword from "./idPassword";
 const express = require("express");
 const bodyParser = require("body-parser");
 
 const app = express();
 const port = 8080;
-const id = "";
-const password = "";
-const url = `mongodb+srv://${id}:${password}@apple.oaghb.mongodb.net/?retryWrites=true&w=majority`;
+
+const url = `mongodb+srv://${idPassword.id}:${idPassword.password}@apple.oaghb.mongodb.net/?retryWrites=true&w=majority`;
 
 function saveOneData(dbName, colName, data) {
     const MongoClient = require("mongodb").MongoClient;
