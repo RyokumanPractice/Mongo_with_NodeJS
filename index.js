@@ -3,11 +3,33 @@ const bodyParser = require("body-parser");
 
 const app = express();
 const port = 8080;
-const MongoClient = require("mongodb").MongoClient;
+const id = "";
+const password = "";
+const url = `mongodb+srv://${id}:${password}@apple.oaghb.mongodb.net/?retryWrites=true&w=majority`;
+
+function saveOneData(dbName, colName, data) {
+    const MongoClient = require("mongodb").MongoClient;
+    MongoClient.connect(url, (err, client) => {
+        if (err) {
+            return console.log(err);
+        }
+
+        const db = client.db(dbName);
+
+        db.collection(colName).insertOne(data, (err, result) => {
+            if (err) {
+                return console.log(err);
+            }
+            console.log("저장완료");
+        });
+
+        return;
+    });
+}
 
 app.use(bodyParser.urlencoded({ extended: true }));
 
-app.listen(port, function () {
+app.listen(port, () => {
     console.log(`listening on ${port}`);
 });
 
@@ -21,6 +43,6 @@ app.get("/write", (req, res) => {
 
 app.post("/add", (req, res) => {
     res.sendFile(__dirname + "/src/Pages/Add.html");
-    console.log(req.body.title);
-    console.log(req.body.date);
+    const sampleData = { title: req.body.title, date: req.body.date };
+    saveOneData("todoapp", "post", sampleData);
 });
