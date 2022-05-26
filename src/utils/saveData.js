@@ -1,6 +1,8 @@
-const idPassword = require("../../idPassword");
-const url = `mongodb+srv://${idPassword.id}:${idPassword.password}@apple.oaghb.mongodb.net/?retryWrites=true&w=majority`;
+require("dotenv").config();
 
+const url = `mongodb+srv://${process.env.id}:${process.env.password}@apple.oaghb.mongodb.net/?retryWrites=true&w=majority`;
+
+console.log(url);
 function saveOneData(dbName, colName, data) {
     const MongoClient = require("mongodb").MongoClient;
     MongoClient.connect(url, (err, client) => {
