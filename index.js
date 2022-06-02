@@ -1,6 +1,6 @@
 const express = require("express");
 const bodyParser = require("body-parser");
-const dbUtil = require("./src/utils/dbUtils");
+const { saveOneData, findAll } = require("./src/utils/dbUtils");
 
 const app = express();
 const dbName = "todoapp";
@@ -24,13 +24,11 @@ app.get("/write", (req, res) => {
 app.post("/add", (req, res) => {
     res.sendFile(__dirname + "/src/Pages/Add.html");
     const sampleData = { title: req.body.title, date: req.body.date };
-    dbUtil.saveOneData(dbName, colName, sampleData);
+    saveOneData(dbName, colName, sampleData);
 });
 
 app.get("/list", (req, res) => {
-    const result = dbUtil.getEveryData(dbName, colName);
-    setTimeout(() => {
-        res.sendFile(__dirname + "/src/Pages/Home.html");
-        console.log(typeof result);
-    }, 700);
+    findAll(dbName, colName).then((e) => {
+        res.json(e);
+    });
 });

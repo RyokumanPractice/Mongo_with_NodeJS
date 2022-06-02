@@ -21,23 +21,25 @@ function saveOneData(dbName, colName, data) {
 function getOneData() {}
 
 function getEveryData(dbName, colName) {
-    let hello;
-
-    MongoClient.connect(url, (err, client) => {
-        if (err) console.log(err);
-
-        const db = client.db(dbName);
-        const result = db
-            .collection(colName)
-            .find()
-            .toArray((err, result) => {
-                hello = result;
-            });
+    const promise = new Promise((resolve, reject) => {
+        MongoClient.connect(url, (err, client) => {
+            const db = client.db(dbName);
+            resolve(db.collection(colName).find());
+        });
     });
-    setTimeout(() => {
-        console.log(hello);
-        return hello;
-    }, 500);
+    return promise;
 }
 
-module.exports = { saveOneData: saveOneData, getEveryData: getEveryData };
+function findAll(dbName, colName) {
+    const promise = new Promise((resolve, reject) => {
+        getEveryData(dbName, colName).then((e) => {
+            e.toArray((err, result) => {
+                resolve(result);
+            });
+        });
+    });
+
+    return promise;
+}
+
+module.exports = { saveOneData: saveOneData, findAll: findAll };
