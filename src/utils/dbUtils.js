@@ -18,9 +18,9 @@ function saveOneData(dbName, colName, data) {
     });
 }
 
-function getOneData() {}
+function findById() {}
 
-function getEveryData(dbName, colName) {
+function getData(dbName, colName) {
     const promise = new Promise((resolve, reject) => {
         MongoClient.connect(url, (err, client) => {
             const db = client.db(dbName);
@@ -32,7 +32,7 @@ function getEveryData(dbName, colName) {
 
 function findAll(dbName, colName) {
     const promise = new Promise((resolve, reject) => {
-        getEveryData(dbName, colName).then((e) => {
+        getData(dbName, colName).then((e) => {
             e.toArray((err, result) => {
                 resolve(result);
             });
