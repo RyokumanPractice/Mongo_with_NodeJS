@@ -1,0 +1,16 @@
+version: "3.9"
+services:
+  back-end:
+    build: "./backEnd"
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./backEnd:/usr/backEnd
+    container_name: backEnd
+  front-end:
+    build: "./frontEnd"
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./frontEnd:/usr/frontEnd
+    container_name: frontEnd
