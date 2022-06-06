@@ -1,15 +1,18 @@
-const { findById } = require("../utils/postUtils");
+const { findById, test } = require("../utils/postUtils");
 const express = require("express");
 
 const router = express.Router();
-const dbName = "todoapp";
-const colName = "post";
 
 router.get("/findid", (req, res) => {
-    findById(dbName, colName, 1).then((e) => {
+    findById(1).then((e) => {
         res.send(e);
         console.log(e);
     });
+});
+
+router.get("/test", (req, res) => {
+    test();
+    res.send("test");
 });
 
 module.exports = router;

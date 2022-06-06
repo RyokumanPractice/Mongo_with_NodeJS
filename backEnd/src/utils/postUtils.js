@@ -3,7 +3,32 @@ require("dotenv").config();
 const url = `mongodb+srv://${process.env.id}:${process.env.password}@apple.oaghb.mongodb.net/?retryWrites=true&w=majority`;
 const MongoClient = require("mongodb").MongoClient; // mongoDB 가져오기
 
-function saveOneData(dbName, colName, data) {
+const dbName = "todoapp";
+const colName = "post";
+
+function postNumUpdate() {
+    MongoClient.connect(url, (err, client) => {
+        if (err) return console.log(err);
+
+        const db = client.db(dbName);
+
+        db.collection(colName).updateOne({}, {}, () => {});
+    });
+}
+
+function test() {
+    MongoClient.connect(url, (err, client) => {
+        if (err) return console.log(err);
+
+        const db = client.db(dbName);
+
+        const value = db
+            .collection(colName)
+            .findOne({ _id: `${process.env.postNumId}` });
+    });
+}
+
+function saveOneData(data) {
     MongoClient.connect(url, (err, client) => {
         if (err) return console.log(err); // 에러 시
 
@@ -18,7 +43,7 @@ function saveOneData(dbName, colName, data) {
     });
 }
 
-function findById(dbName, colName, id) {
+function findById(id) {
     const promise = new Promise((resolve, reject) => {
         MongoClient.connect(url, (err, client) => {
             const db = client.db(dbName);
@@ -29,7 +54,7 @@ function findById(dbName, colName, id) {
     return promise;
 }
 
-function findAll(dbName, colName) {
+function findAll() {
     const getData = new Promise((resolve, reject) => {
         MongoClient.connect(url, (err, client) => {
             const db = client.db(dbName);
@@ -53,4 +78,5 @@ module.exports = {
     saveOneData: saveOneData,
     findAll: findAll,
     findById: findById,
+    test: test,
 };
