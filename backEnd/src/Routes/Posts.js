@@ -1,5 +1,5 @@
 const express = require("express");
-const { saveOneData, findAll } = require("../utils/postUtils");
+const { findAllPost } = require("../utils/postUtils");
 
 const router = express.Router();
 
@@ -8,7 +8,7 @@ router.get("/", (req, res) => {
 });
 
 router.get("/list", (req, res) => {
-    findAll().then((e) => {
+    findAllPost().then((e) => {
         res.json(e);
     });
 });

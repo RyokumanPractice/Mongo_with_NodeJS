@@ -1,17 +1,17 @@
-const { findById, test } = require("../utils/postUtils");
+const { findByPostId, addPost } = require("../utils/postUtils");
 const express = require("express");
 
 const router = express.Router();
 
 router.get("/findid", (req, res) => {
-    findById(1).then((e) => {
+    findByPostId(1).then((e) => {
         res.send(e);
         console.log(e);
     });
 });
 
-router.get("/test", (req, res) => {
-    test();
+router.get("/", (req, res) => {
+    addPost("hello", "몰라", "닉네임", "");
     res.send("test");
 });
 
