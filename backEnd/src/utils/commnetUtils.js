@@ -13,14 +13,11 @@ function addComment(content, writer, isReply, commentFor) {
             const db = client.db(dbName);
             db.collection(colName).insertOne({
                 _id: e,
-                title: title,
-                content: content,
-                writer: writer,
-                img: img,
-                like: [],
-                comment: [],
+                content,
+                writer,
+                commentFor,
+                isReply,
             });
-            console.log(`${e} has been added`);
             return;
         });
     });
@@ -53,47 +50,11 @@ function findByCommentId(id) {
     return promise;
 }
 
-function findComment(cases, value) {
-    const getData = new Promise((resolve, reject) => {
-        MongoClient.connect(url, (err, client) => {
-            const db = client.db(dbName);
-            if (value === null) cases = all;
-            switch (cases) {
-                case "all":
-                    resolve(db.collection(colName).find());
-                    break;
-                case "writer":
-                    resolve(db.collection(colName).find({ writer: value }));
-                    break;
-                case "content":
-                    resolve(db.collection(colName).find({ content: value }));
-                    break;
-                case "commentFor":
-                    resolve(db.collection(colName).find({ commentFor: value }));
-                    break;
-                default:
-                    console.error("there is no cases!!!!!");
-            }
-            return;
-        });
-    });
-
-    const promise = new Promise((resolve, reject) => {
-        getData.then((e) => {
-            e.toArray((err, result) => {
-                resolve(result);
-            });
-        });
-    });
-
-    return promise;
-}
-
-function deleteByPostId(id) {
+function deleteByCommentID(id) {
     MongoClient.connect(url, (err, client) => {
         const db = client.db(dbName);
         db.collection(colName).deleteOne({ _id: id });
-        postNumDel();
+        commentNumDel();
         return;
     });
 }
@@ -147,6 +108,8 @@ function commentNumDel() {
 }
 
 module.exports = {
-    commentNumAdd,
-    commentNumDel,
+    deleteByCommentID,
+    modComment,
+    addComment,
+    findByCommentId,
 };

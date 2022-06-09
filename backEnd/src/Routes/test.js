@@ -1,9 +1,10 @@
-const {} = require("../utils/commnetUtils");
+const { deleteByCommentID } = require("../utils/commnetUtils");
 const express = require("express");
 
 const router = express.Router();
 
 router.get("/comment", (req, res) => {
+    deleteByCommentID(1);
     res.send("added");
 });
 

@@ -20,7 +20,6 @@ function addPost(title, content, writer, img) {
                 like: [],
                 comment: [], // commentnumber
             });
-            console.log(`${e} has been added`);
             return;
         });
     });
