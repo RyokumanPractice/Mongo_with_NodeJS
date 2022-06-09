@@ -1,23 +1,15 @@
-const { findByPostId, addPost } = require("../utils/postUtils");
+const {} = require("../utils/commnetUtils");
 const express = require("express");
-const { sample } = require("../assets/img/sample");
 
 const router = express.Router();
 
-router.get("/findid", (req, res) => {
-    findByPostId(1).then((e) => {
-        res.send(e);
-        console.log(e);
-    });
+router.get("/comment", (req, res) => {
+    res.send("added");
 });
 
-router.get("/sample", (req, res) => {
-    sample();
-});
-
-router.get("/", (req, res) => {
-    addPost("hello", "몰라", "닉네임", "");
-    res.send("test");
+router.get("/user", (req, res) => {
+    addUser("ryokuman3", "1234", "료쿠지", "");
+    res.send("adduser");
 });
 
 module.exports = router;

@@ -7,22 +7,7 @@ const dbName = process.env.dbName;
 const colName = "post";
 
 function addPost(title, content, writer, img) {
-    const promise = new Promise((resolve) => {
-        postNumAdd();
-        MongoClient.connect(url, (err, client) => {
-            if (err) console.log(err);
-            const db = client.db(dbName);
-            db.collection("idController").findOne(
-                {
-                    _id: `${process.env.postNumId}`,
-                },
-                (err, result) => {
-                    resolve(result.num);
-                }
-            );
-            return;
-        });
-    }).then((e) => {
+    postNumAdd(true).then((e) => {
         MongoClient.connect(url, (err, client) => {
             if (err) console.log(err);
             const db = client.db(dbName);
@@ -41,13 +26,23 @@ function addPost(title, content, writer, img) {
     });
 }
 
-function modPost(id) {}
+function modPost(id, title, content, img) {
+    MongoClient.connect(url, (err, client) => {
+        if (err) console.log(err);
 
-function findByPostContent(content) {}
-
-function findByPostTitle(title) {}
-
-function findByPostWriter(writer) {}
+        const db = client.db(dbName);
+        db.collection(colName).updateOne(
+            { _id: id },
+            {
+                $set: {
+                    title: title,
+                    content: content,
+                    img: img,
+                },
+            }
+        );
+    });
+}
 
 function findByPostId(id) {
     const promise = new Promise((resolve, reject) => {
@@ -60,11 +55,26 @@ function findByPostId(id) {
     return promise;
 }
 
-function findAllPost() {
+function findPost(cases, value) {
     const getData = new Promise((resolve, reject) => {
         MongoClient.connect(url, (err, client) => {
             const db = client.db(dbName);
-            resolve(db.collection(colName).find());
+            switch (cases) {
+                case "all":
+                    resolve(db.collection(colName).find());
+                    break;
+                case "content":
+                    resolve(db.collection(colName).find({ content: value }));
+                    break;
+                case "title":
+                    resolve(db.collection(colName).find({ title: value }));
+                    break;
+                case "writer":
+                    resolve(db.collection(colName).find({ writer: value }));
+                    break;
+                default:
+                    console.error("there is no cases!!!!!");
+            }
             return;
         });
     });
@@ -89,22 +99,34 @@ function deleteByPostId(id) {
     });
 }
 
-function postNumAdd() {
-    MongoClient.connect(url, (err, client) => {
-        const db = client.db(dbName);
+function postNumAdd(isreturn) {
+    const promise = new Promise((resolve) => {
+        MongoClient.connect(url, (err, client) => {
+            const db = client.db(dbName);
 
-        db
-            .collection("idController")
-            .updateOne(
-                { _id: `${process.env.postNumId}` },
-                { $inc: { num: 1, totalPost: 1 } }
-            ),
-            (err) => {
-                if (err) console.log(err);
-            };
-
-        return;
+            db
+                .collection("idController")
+                .updateOne(
+                    { _id: `${process.env.postNumId}` },
+                    { $inc: { num: 1, totalPost: 1 } }
+                ),
+                (err) => {
+                    if (err) console.log(err);
+                };
+            if (isreturn)
+                db.collection("idController").findOne(
+                    {
+                        _id: `${process.env.postNumId}`,
+                    },
+                    (err, result) => {
+                        resolve(result.num);
+                    }
+                );
+            return;
+        });
     });
+
+    return promise;
 }
 
 function postNumDel() {
@@ -126,8 +148,11 @@ function postNumDel() {
 }
 
 module.exports = {
-    findAllPost: findAllPost,
-    findByPostId: findByPostId,
-    deleteByPostId: deleteByPostId,
-    addPost: addPost,
+    findPost,
+    findByPostId,
+    deleteByPostId,
+    addPost,
+    modPost,
+    postNumAdd,
+    postNumDel,
 };
