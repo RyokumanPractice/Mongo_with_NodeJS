@@ -13,4 +13,14 @@ router.get("/user", (req, res) => {
     res.send("adduser");
 });
 
+router.get("/artists", function (req, res) {
+    console.log("이름은 " + req.query.name + " 입니다");
+    res.send("name : " + req.query.name);
+});
+
+router.get("/test", (req, res) => {
+    console.log("입력값은" + req.query.value);
+    res.send("입력값 : " + req.query.value);
+});
+
 module.exports = router;
