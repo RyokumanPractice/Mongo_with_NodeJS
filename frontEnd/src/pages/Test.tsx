@@ -1,10 +1,19 @@
-function Test() {
-    fetch("http://localhost:8080/post/list").then((response) =>
-        console.log(response)
-    );
-    // .then((data) => console.log(data));
+const url = "http://localhost:8080/test/test";
 
-    return <div></div>;
+function Test() {
+    fetch(url).then((response) => {
+        console.log(response);
+        response.json().then((e) => {
+            console.log(typeof e);
+            console.log(e.name);
+        });
+    });
+
+    return (
+        <div>
+            <p>hello</p>
+        </div>
+    );
 }
 
 export default Test;
